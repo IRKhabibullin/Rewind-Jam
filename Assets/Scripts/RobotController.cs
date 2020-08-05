@@ -2,47 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RobotController : MonoBehaviour {
-	public enum ActionName {
-		Move
-	}
-	[System.Serializable]
-   	public class Action {
-       	public ActionName name;
-       	public float position;
-    }
+public class RobotController : MonoBehaviour, IControllable {
 
-    [SerializeField] private Action[] actions;
-    [SerializeField] private float absVelocity;
-    private Vector2 currentVelocity;
-    private int currentActionId;
-    private Action currentAction;
+    [SerializeField] private Instruction[] instructions;
+    public float absVelocity;
+    public Vector2 currentVelocity;
+    public float approximateDistance = 0.05f;
+    private int currentInstructionId;
+    private Instruction currentInstruction;
     private Rigidbody2D body;
-    [SerializeField] private float approximateDistance = 0.1f;
     
     void Start() {
     	body = GetComponent<Rigidbody2D>();
-        currentActionId = 0;
-        StartAction();
+        currentInstructionId = -1;
+        NextInstruction();
     }
 
-    void StartAction() {
-        currentAction = actions[currentActionId];
-        float direction = Mathf.Sign(currentAction.position - transform.position.x);
-        currentVelocity = new Vector2(absVelocity * direction, 0f);
-        body.velocity = currentVelocity;
+    void NextInstruction() {
+    	currentInstructionId += 1;
+    	if (currentInstructionId >= instructions.Length) {
+    		currentInstructionId = 0;
+    	}
+        currentInstruction = instructions[currentInstructionId];
+        Actions.Execute(gameObject, currentInstruction.name, currentInstruction.position);
     }
 
     
     void Update() {
-        if (Mathf.Abs(currentAction.position - transform.position.x) < approximateDistance) {
-        	Debug.Log($"Reached point {currentAction.position}");
-        	currentActionId += 1;
-        	if (currentActionId >= actions.Length) {
-        		currentActionId = 0;
-        	}
-        	StartAction();
+        if (Mathf.Abs(currentInstruction.position - transform.position.x) < approximateDistance) {
+    		currentVelocity = new Vector2(0f, 0f);
+        	NextInstruction();
         }
     	body.velocity = currentVelocity;
+    }
+
+    public void Activate() {
+    	// todo implement for further uses
     }
 }

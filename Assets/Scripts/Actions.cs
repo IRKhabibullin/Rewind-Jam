@@ -87,6 +87,7 @@ public class Actions {
 	}
 
 	private static void Release(GameObject executor) {
+		// release action position must be for <grabPosition> lower than previous action
         executor.GetComponent<CraneController>().grabbedObject = null;
 	}
 }

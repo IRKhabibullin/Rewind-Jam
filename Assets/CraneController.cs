@@ -36,7 +36,6 @@ public class CraneController : MonoBehaviour, IControllable {
 	    		}
     		}
 			if (Mathf.Abs(currentInstruction.position - currentPosition) < approximateDistance) {
-        		// Debug.Log($"{currentInstruction.name};{head.transform.position.x}:{head.transform.position.y}|{currentInstruction.position}|{currentPosition}");
     			currentVelocity = new Vector2(0f, 0f);
         		NextInstruction();
         	}
@@ -60,7 +59,6 @@ public class CraneController : MonoBehaviour, IControllable {
     		return;
     	}
         currentInstruction = instructions[currentInstructionId];
-    	Debug.Log($"Instruction {currentInstruction.name}|{head.transform.position.x}:{head.transform.position.y}");
         Actions.Execute(gameObject, currentInstruction.name, currentInstruction.position);
     }
 }

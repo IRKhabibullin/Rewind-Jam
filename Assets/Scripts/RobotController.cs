@@ -6,7 +6,7 @@ public class RobotController : MonoBehaviour, IControllable {
 
     [SerializeField] private Instruction[] instructions;
     public float absVelocity;
-    public Vector2 currentVelocity;
+    [HideInInspector] public Vector2 currentVelocity;
     public float approximateDistance = 0.05f;
     private int currentInstructionId;
     private Instruction currentInstruction;

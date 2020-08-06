@@ -47,6 +47,7 @@ public class Actions {
 
 	private static void Move(GameObject executor, float position) {
         float direction = Mathf.Sign(position - executor.transform.position.x);
+        executor.transform.rotation = Quaternion.LookRotation(new Vector3(0, 0, -direction));
         RobotController controller = executor.GetComponent<RobotController>();
         controller.currentVelocity = new Vector2(controller.absVelocity * direction, 0f);
         executor.GetComponent<Rigidbody2D>().velocity = controller.currentVelocity;
@@ -54,10 +55,8 @@ public class Actions {
 
 	private static void Activate(GameObject executor) {
 		GameObject[] buttons = GameObject.FindGameObjectsWithTag("Button");
-		Debug.Log($"Trying to activate button from position {executor.transform.position.x}");
         RobotController controller = executor.GetComponent<RobotController>();
 		foreach (GameObject button in buttons) {
-			Debug.Log($"Button is in {button.transform.position.x}");
 			if (Mathf.Abs(button.transform.position.x - executor.transform.position.x) < controller.approximateDistance) {
 				button.GetComponent<ButtonController>().Activate();
 			}

@@ -7,5 +7,6 @@ public class DropperController : MonoBehaviour, IControllable {
 
     public void Activate() {
         Instantiate(box, transform.position, Quaternion.identity);
+    	Debug.Log("Created box");
     }   
 }

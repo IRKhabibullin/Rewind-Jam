@@ -54,8 +54,10 @@ public class Actions {
 
 	private static void Activate(GameObject executor) {
 		GameObject[] buttons = GameObject.FindGameObjectsWithTag("Button");
+		Debug.Log($"Trying to activate button from position {executor.transform.position.x}");
         RobotController controller = executor.GetComponent<RobotController>();
 		foreach (GameObject button in buttons) {
+			Debug.Log($"Button is in {button.transform.position.x}");
 			if (Mathf.Abs(button.transform.position.x - executor.transform.position.x) < controller.approximateDistance) {
 				button.GetComponent<ButtonController>().Activate();
 			}

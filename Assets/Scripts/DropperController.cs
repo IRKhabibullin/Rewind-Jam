@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DropperController : MonoBehaviour, IControllable {
+public class DropperController : MonoBehaviour, IPressable {
 	[SerializeField] private GameObject box;
 
     public void Activate() {

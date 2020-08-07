@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class ButtonController : MonoBehaviour, IPressable {
 
-	private IControllable mechanism;
+	private IPressable mechanism;
 
     void Start() {
-        mechanism = transform.parent.gameObject.GetComponent<IControllable>();
+        mechanism = transform.parent.gameObject.GetComponent<IPressable>();
     }
 
     public void Activate() {

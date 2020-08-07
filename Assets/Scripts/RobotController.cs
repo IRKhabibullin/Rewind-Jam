@@ -11,15 +11,21 @@ public class RobotController : MonoBehaviour, IControllable {
     private int currentInstructionId;
     private Instruction currentInstruction;
     private Rigidbody2D body;
+    private RemoteController remote;
+
+    [HideInInspector] public bool isRewinded { get; set; }
+
     
     void Start() {
     	body = GetComponent<Rigidbody2D>();
         currentInstructionId = -1;
+        isRewinded = false;
+        remote = GameObject.Find("Player").GetComponent<RemoteController>();
         NextInstruction();
     }
 
     void NextInstruction() {
-    	currentInstructionId += 1;
+    	currentInstructionId += isRewinded ? -1 : 1;
     	if (currentInstructionId >= instructions.Length) {
     		currentInstructionId = 0;
     	}
@@ -38,5 +44,21 @@ public class RobotController : MonoBehaviour, IControllable {
 
     public void Activate() {
     	// todo implement for further uses
+    }
+
+    void OnMouseOver() {
+    	if (remote.isAiming) {
+    		remote.AimFound();
+    	}
+    }
+
+    void OnMouseExit() {
+		remote.AimLost();
+    }
+
+    void OnMouseDown() {
+    	if (Input.GetMouseButtonDown(0) & remote.isAiming) {
+    		remote.Rewind(gameObject);
+    	}
     }
 }

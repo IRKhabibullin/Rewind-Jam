@@ -7,12 +7,11 @@ public interface IPressable {
 	void Activate();
 }
 
-public interface IControllable {
+public interface IControllable: IPressable {
 	// player/remote/buttons can activate, robots can't
 
 	// float currentVelocity { get; set; }
 	// float absVelocity { get; set; }
 	// float approximateDistance { get; set; }
-
-	void Activate();
+	bool isRewinded {get; set; }
 }

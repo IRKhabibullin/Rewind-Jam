@@ -15,12 +15,17 @@ public class CraneController : MonoBehaviour, IControllable {
     public float absVelocity;
     public Vector2 currentVelocity;
     public float approximateDistance = 0.05f;
+    private RemoteController remote;
+
+    [HideInInspector] public bool isRewinded { get; set; }
 
     void Start() {
         head = transform.Find("CraneHead").gameObject;
         activated = false;
         currentInstructionId = -1;
         grabPosition = new Vector3(0f, -0.75f, 0f);
+        isRewinded = false;
+        remote = GameObject.Find("Player").GetComponent<RemoteController>();
     }
 
     
@@ -52,7 +57,7 @@ public class CraneController : MonoBehaviour, IControllable {
     }
 
     void NextInstruction() {
-    	currentInstructionId += 1;
+    	currentInstructionId += isRewinded ? -1 : 1;
     	if (currentInstructionId >= instructions.Length) {
     		currentInstructionId = -1;
     		activated = false;
@@ -60,5 +65,21 @@ public class CraneController : MonoBehaviour, IControllable {
     	}
         currentInstruction = instructions[currentInstructionId];
         Actions.Execute(gameObject, currentInstruction.name, currentInstruction.position);
+    }
+
+    void OnMouseOver() {
+        if (remote.isAiming) {
+            remote.AimFound();
+        }
+    }
+
+    void OnMouseExit() {
+        remote.AimLost();
+    }
+
+    void OnMouseDown() {
+        if (Input.GetMouseButtonDown(0) & remote.isAiming) {
+            remote.Rewind(gameObject);
+        }
     }
 }

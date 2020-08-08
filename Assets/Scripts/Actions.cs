@@ -51,15 +51,22 @@ public class Actions {
         RobotController controller = executor.GetComponent<RobotController>();
         controller.currentVelocity = new Vector2(controller.absVelocity * direction, 0f);
         executor.GetComponent<Rigidbody2D>().velocity = controller.currentVelocity;
+        controller.animator.SetBool("Moving", true);
 	}
 
 	private static void Activate(GameObject executor) {
 		GameObject[] buttons = GameObject.FindGameObjectsWithTag("Button");
         RobotController controller = executor.GetComponent<RobotController>();
+        bool foundButton = false;
 		foreach (GameObject button in buttons) {
 			if (Mathf.Abs(button.transform.position.x - executor.transform.position.x) < controller.approximateDistance) {
 				button.GetComponent<ButtonController>().Activate();
+				foundButton = true;
+				Debug.Log("Activate command executed");
 			}
+		}
+		if (!foundButton) {
+			Debug.Log($"Any button from {buttons.Length} buttons not reachable");
 		}
 	}
 

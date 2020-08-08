@@ -12,32 +12,45 @@ public class RobotController : MonoBehaviour, IControllable {
     private Instruction currentInstruction;
     private Rigidbody2D body;
     private RemoteController remote;
+    private bool isWaiting;
+    private bool endedCommand;
+    public Animator animator;
 
     [HideInInspector] public bool isRewinded { get; set; }
 
     
     void Start() {
     	body = GetComponent<Rigidbody2D>();
+    	animator = GetComponent<Animator>();
         currentInstructionId = -1;
         isRewinded = false;
         remote = GameObject.Find("Player").GetComponent<RemoteController>();
-        NextInstruction();
+        endedCommand = true;
+        isWaiting = false;
     }
 
     void NextInstruction() {
     	currentInstructionId += isRewinded ? -1 : 1;
     	if (currentInstructionId >= instructions.Length) {
     		currentInstructionId = 0;
+    	} else if (currentInstructionId < 0) {
+    		currentInstructionId = instructions.Length - 1;
     	}
         currentInstruction = instructions[currentInstructionId];
         Actions.Execute(gameObject, currentInstruction.name, currentInstruction.position);
+        endedCommand = false;
+        Debug.Log($"Executing command {currentInstruction.name} from position {transform.position.x}:{transform.position.y}");
     }
 
     
     void Update() {
-        if (Mathf.Abs(currentInstruction.position - transform.position.x) < approximateDistance) {
-    		currentVelocity = new Vector2(0f, 0f);
+    	if (endedCommand & !isWaiting) {
         	NextInstruction();
+    	} else if (Mathf.Abs(currentInstruction.position - transform.position.x) < approximateDistance) {
+    		currentVelocity = new Vector2(0f, 0f);
+    		animator.SetBool("Moving", false);
+			endedCommand = true;
+			StartCoroutine(WaitCommand(1f));
         }
     	body.velocity = currentVelocity;
     }
@@ -61,4 +74,10 @@ public class RobotController : MonoBehaviour, IControllable {
     		remote.Rewind(gameObject);
     	}
     }
+
+    IEnumerator WaitCommand(float time) {
+    	isWaiting = true;
+		yield return new WaitForSeconds(time);
+		isWaiting = false;
+	}
 }

@@ -21,6 +21,8 @@ namespace NinjaController {
     private float timeRealLastWallLeftCollision = 0;
     private float timeRealLastWallRightCollision = 0;
 
+    private Animator animator;
+
     public bool IsOnGround {
       get {
         return GetIsColliding(timeRealLastGroundCollision);
@@ -47,6 +49,7 @@ namespace NinjaController {
 
     private Vector2 currentVelocity = Vector2.zero;
     private Vector2 currentForce = Vector2.zero;
+    private float lookDirection = 1f;
 
     private float EntityMass { get { return(PhysicsParams.playerMass); } }
 
@@ -88,6 +91,7 @@ namespace NinjaController {
 
     public void Awake() {
       RBody = GetComponent<Rigidbody2D>();
+      animator = GetComponent<Animator>();
       allRenderers = new List<Renderer>(GetComponentsInChildren<Renderer>(true));
     }
       
@@ -128,6 +132,15 @@ namespace NinjaController {
       }
 
       RBody.velocity = currentVelocity;
+      if (currentVelocity.x != 0) {
+        if (Mathf.Sign(currentVelocity.x) != lookDirection) {
+          lookDirection = Mathf.Sign(currentVelocity.x);
+          transform.rotation = Quaternion.LookRotation(new Vector3(0, 0, lookDirection));
+        }
+        animator.SetBool("Moving", true);
+      } else {
+        animator.SetBool("Moving", false);
+      }
     }
 
     private void ProcessInput() {

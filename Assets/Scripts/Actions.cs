@@ -45,8 +45,9 @@ public class Actions {
 		}
 	}
 
-	private static void Move(GameObject executor, float position) {
-        float direction = Mathf.Sign(position - executor.transform.position.x);
+	private static void Move(GameObject executor, float position)
+	{
+		float direction = Mathf.Sign(position - executor.transform.position.x);
         executor.transform.rotation = Quaternion.LookRotation(new Vector3(0, 0, -direction));
         RobotController controller = executor.GetComponent<RobotController>();
         controller.currentVelocity = new Vector2(controller.absVelocity * direction, 0f);

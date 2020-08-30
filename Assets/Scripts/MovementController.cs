@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.Events;
 
 public class MovementController : MonoBehaviour
@@ -13,12 +14,23 @@ public class MovementController : MonoBehaviour
 	[SerializeField] private Collider2D m_CrouchDisableCollider;                // A collider that will be disabled when crouching
 
 	const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
-	private bool m_Grounded;            // Whether or not the player is grounded.
 	const float k_CeilingRadius = .2f; // Radius of the overlap circle to determine if the player can stand up
 	private Rigidbody2D m_Rigidbody2D;
-	private Animator animator;
+	private Animator m_Animator;
+	private AudioSource m_AudioSource;
 	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
 	private Vector3 m_Velocity = Vector3.zero;
+
+	private bool wasGrounded = true;
+	private bool isGrounded = true;
+
+	private bool wasMoving = false;
+	private bool isMoving = false;
+
+	private TextMeshProUGUI isMovingStatus;
+	private TextMeshProUGUI wasMovingStatus;
+	private TextMeshProUGUI isGroundedStatus;
+	private TextMeshProUGUI wasGroundedStatus;
 
 	[Header("Events")]
 	[Space]
@@ -34,7 +46,8 @@ public class MovementController : MonoBehaviour
 	private void Awake()
 	{
 		m_Rigidbody2D = GetComponent<Rigidbody2D>();
-		animator = GetComponent<Animator>();
+		m_Animator = GetComponent<Animator>();
+		m_AudioSource = GetComponent<AudioSource>();
 
 		if (OnLandEvent == null)
 			OnLandEvent = new UnityEvent();
@@ -43,10 +56,23 @@ public class MovementController : MonoBehaviour
 			OnCrouchEvent = new BoolEvent();
 	}
 
-	private void FixedUpdate()
+    private void Start()
 	{
-		bool wasGrounded = m_Grounded;
-		m_Grounded = false;
+		isMovingStatus = GameObject.Find("IsMovingStatus").GetComponent<TextMeshProUGUI>();
+		wasMovingStatus = GameObject.Find("WasMovingStatus").GetComponent<TextMeshProUGUI>();
+		isGroundedStatus = GameObject.Find("IsGroundedStatus").GetComponent<TextMeshProUGUI>();
+		wasGroundedStatus = GameObject.Find("WasGroundedStatus").GetComponent<TextMeshProUGUI>();
+
+		isMovingStatus.text = $"IsMoving: {isMoving}";
+		wasMovingStatus.text = $"WasMoving: {wasMoving}";
+		isGroundedStatus.text = $"IsGrounded: {isGrounded}";
+		wasGroundedStatus.text = $"WasGrounded: {wasGrounded}";
+	}
+
+    private void FixedUpdate()
+	{
+		wasGrounded = isGrounded;
+		isGrounded = false;
 
 		// The player is grounded if a circlecast to the groundcheck position hits anything designated as ground
 		// This can be done using layers instead but Sample Assets will not overwrite your project settings.
@@ -55,7 +81,7 @@ public class MovementController : MonoBehaviour
 		{
 			if (colliders[i].gameObject != gameObject)
 			{
-				m_Grounded = true;
+				isGrounded = true;
 				if (!wasGrounded)
 					OnLandEvent.Invoke();
 			}
@@ -76,7 +102,7 @@ public class MovementController : MonoBehaviour
 		}
 
 		//only control the player if grounded or airControl is turned on
-		if (m_Grounded || m_AirControl)
+		if (isGrounded || m_AirControl)
 		{
 
 			// If crouching
@@ -113,7 +139,17 @@ public class MovementController : MonoBehaviour
 			// And then smoothing it out and applying it to the character
 			m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
 
-			animator.SetBool("Moving", move != 0);
+			wasMoving = isMoving;
+			if (move != 0 && !isMoving)
+            {
+				isMoving = true;
+				m_Animator.SetBool("Moving", true);
+			} else if (move == 0 && isMoving)
+            {
+				isMoving = false;
+				m_Animator.SetBool("Moving", false);
+			}
+			
 			// If the input is moving the player right and the player is facing left...
 			if (move > 0 && !m_FacingRight)
 			{
@@ -126,12 +162,36 @@ public class MovementController : MonoBehaviour
 				// ... flip the player.
 				Flip();
 			}
+
+			isMovingStatus.text = $"IsMoving: {isMoving}";
+			wasMovingStatus.text = $"WasMoving: {wasMoving}";
+			isGroundedStatus.text = $"IsGrounded: {isGrounded}";
+			wasGroundedStatus.text = $"WasGrounded: {wasGrounded}";
+		}
+
+		if (isMoving)
+		{
+			if (!wasMoving || !wasGrounded && isGrounded)
+			{
+				m_AudioSource.Play();
+			}
+			else if (wasGrounded && !isGrounded)
+			{
+				m_AudioSource.Stop();
+			}
+		}
+		else
+		{
+			if (wasMoving)
+			{
+				m_AudioSource.Stop();
+			}
 		}
 		// If the player should jump...
-		if (m_Grounded && jump)
+		if (isGrounded && jump)
 		{
 			// Add a vertical force to the player.
-			m_Grounded = false;
+			isGrounded = false;
 			m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
 		}
 	}

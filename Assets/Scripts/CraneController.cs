@@ -47,7 +47,7 @@ public class CraneController : MonoBehaviour, IControllable {
     		head.GetComponent<Rigidbody2D>().velocity = currentVelocity;
     		if (grabbedObject != null) {
     			grabbedObject.position = head.transform.position + grabPosition;
-    		}
+            }
         }
     }
 

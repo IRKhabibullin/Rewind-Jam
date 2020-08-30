@@ -27,10 +27,13 @@ public class RobotController : MonoBehaviour, IControllable {
         remote = GameObject.Find("Player").GetComponent<RemoteController>();
         endedCommand = true;
         isWaiting = false;
+        Debug.Log($"Robot start position: {transform.position}");
     }
 
-    void NextInstruction() {
-    	currentInstructionId += isRewinded ? -1 : 1;
+    void NextInstruction()
+    {
+        Debug.Log($"Robot position 1: {transform.position}");
+        currentInstructionId += isRewinded ? -1 : 1;
     	if (currentInstructionId >= instructions.Length) {
     		currentInstructionId = 0;
     	} else if (currentInstructionId < 0) {
@@ -38,13 +41,16 @@ public class RobotController : MonoBehaviour, IControllable {
     	}
         currentInstruction = instructions[currentInstructionId];
         Actions.Execute(gameObject, currentInstruction.name, currentInstruction.position);
+        Debug.Log($"Robot position 2: {transform.position}");
         endedCommand = false;
         Debug.Log($"Executing command {currentInstruction.name} from position {transform.position.x}:{transform.position.y}");
     }
 
     
-    void Update() {
-    	if (endedCommand & !isWaiting) {
+    void Update()
+    {
+        Debug.Log($"Robot position 3: {transform.position}");
+        if (endedCommand & !isWaiting) {
         	NextInstruction();
     	} else if (Mathf.Abs(currentInstruction.position - transform.position.x) < approximateDistance) {
     		currentVelocity = new Vector2(0f, 0f);

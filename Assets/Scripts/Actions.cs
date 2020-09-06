@@ -22,22 +22,22 @@ public class Instruction {
 
 public class Actions {
 
-	public static void Execute(GameObject executor, ActionName action, float position) {
-		switch(action) {
+	public static void Execute(GameObject executor, Instruction instruction) {
+		switch(instruction.name) {
 			case ActionName.Move:
-				Move(executor, position);
+				Move(executor, instruction.position);
 				break;
 			case ActionName.Activate:
 				Activate(executor);
 				break;
 			case ActionName.Lift:
-				Lift(executor, position);
+				Lift(executor, instruction.position);
 				break;
 			case ActionName.MoveSide:
-				MoveSide(executor, position);
+				MoveSide(executor, instruction.position);
 				break;
 			case ActionName.Grab:
-				Grab(executor, position);
+				Grab(executor, instruction.position);
 				break;
 			case ActionName.Release:
 				Release(executor);
@@ -67,7 +67,7 @@ public class Actions {
 			}
 		}
 		if (!foundButton) {
-			Debug.Log($"Any button from {buttons.Length} buttons not reachable");
+			Debug.Log($"Any button from {buttons.Length} buttons not reachable. Robot is in {executor.transform.position.x} ({executor.name})");
 		}
 	}
 
@@ -88,10 +88,16 @@ public class Actions {
 	private static void Grab(GameObject executor, float position) {
 		CraneController controller = executor.GetComponent<CraneController>();
 		GameObject[] grabbables = GameObject.FindGameObjectsWithTag("Grabbable");
+		bool foundButton = false;
 		foreach (GameObject grabbable in grabbables) {
 			if (Mathf.Abs(grabbable.transform.position.x - controller.head.transform.position.x) < controller.approximateDistance) {
 				controller.grabbedObject = grabbable.transform;
+				foundButton = true;
 			}
+		}
+		if (!foundButton)
+		{
+			Debug.Log($"Any object from {grabbables.Length} grabbables not reachable. Crane is in {executor.transform.position.x} ({executor.name})");
 		}
 	}
 

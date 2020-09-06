@@ -236,8 +236,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1840, y: 726.1}
-  m_SizeDelta: {x: 100, y: -6.5}
+  m_AnchoredPosition: {x: -1510.7, y: 661.59}
+  m_SizeDelta: {x: 710.7, y: 17.125}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &79282530
 MonoBehaviour:
@@ -323,7 +323,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 31.59098, y: 31.597109, z: -637.0838, w: -52.66171}
+  m_margin: {x: 0.00020603288, y: 0.00005153765, z: -0.00013728987, w: 5.2662277}
   m_textInfo:
     textComponent: {fileID: 79282530}
     characterCount: 0
@@ -1113,7 +1113,7 @@ Tilemap:
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
       m_AllTileFlags: 1073741825
-  - first: {x: -4, y: -3, z: 0}
+  - first: {x: -3, y: -3, z: 0}
     second:
       serializedVersion: 2
       m_TileIndex: 0
@@ -1533,7 +1533,7 @@ TilemapCollider2D:
   m_GameObject: {fileID: 661629854}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 241d634e296e43e41a32d68fd81f0699, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -1574,8 +1574,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1544.9501, y: 790.75}
-  m_SizeDelta: {x: 321.1, y: -32.1}
+  m_AnchoredPosition: {x: -1155.3, y: 790.75}
+  m_SizeDelta: {x: 710.7, y: 20.6}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &686284958
 MonoBehaviour:
@@ -1661,7 +1661,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -421.21255, w: -26.330881}
+  m_margin: {x: 0, y: 0, z: -0.000106850755, w: -0.000000039235687}
   m_textInfo:
     textComponent: {fileID: 686284958}
     characterCount: 0
@@ -1855,8 +1855,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1840, y: -256.6}
-  m_SizeDelta: {x: 200, y: -1566.7}
+  m_AnchoredPosition: {x: -1510.7, y: 545.01}
+  m_SizeDelta: {x: 810.72, y: 116.02}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &863871571
 MonoBehaviour:
@@ -1942,7 +1942,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 31.59098, y: -1685.1749, z: -631.81885, w: 26.330624}
+  m_margin: {x: -0.44247434, y: 0.9509716, z: 0.00023271145, w: -1.0515137}
   m_textInfo:
     textComponent: {fileID: 863871571}
     characterCount: 0
@@ -2001,7 +2001,7 @@ EdgeCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1061272958}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -2204,8 +2204,8 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &1337631273
-CircleCollider2D:
+--- !u!61 &1337631273
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2214,12 +2214,22 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.2}
+  m_Offset: {x: 0, y: -0.30069184}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.64, y: 0.64}
+    newSize: {x: 0.64, y: 0.64}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
-  m_Radius: 0.08
+  m_Size: {x: 0.64, y: 0.03861633}
+  m_EdgeRadius: 0
 --- !u!114 &1337631274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2510,8 +2520,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1816.1, y: 578}
-  m_SizeDelta: {x: 200, y: 50.05}
+  m_AnchoredPosition: {x: -1510.7, y: 431.9}
+  m_SizeDelta: {x: 810.77, y: 110.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1592454460
 MonoBehaviour:
@@ -2597,7 +2607,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 47.395584, z: -689.73553, w: -78.99269}
+  m_margin: {x: 0, y: -0.66371346, z: -1.0192299, w: 1.106057}
   m_textInfo:
     textComponent: {fileID: 1592454460}
     characterCount: 0
@@ -2782,7 +2792,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 10
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 2
@@ -2862,7 +2872,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c430695c88bc15a49adaaac33b436fd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_JumpForce: 350
+  m_JumpForce: 4000
   m_CrouchSpeed: 0.36
   m_MovementSmoothing: 0.05
   m_AirControl: 1
@@ -3555,6 +3565,11 @@ PrefabInstance:
       propertyPath: animator
       value: 
       objectReference: {fileID: 1642273393}
+    - target: {fileID: 240757590493055248, guid: 6346109ef4849f44aa31f34e7d6335da,
+        type: 3}
+      propertyPath: approximateDistance
+      value: 0.03
+      objectReference: {fileID: 0}
     - target: {fileID: 240757590518743284, guid: 6346109ef4849f44aa31f34e7d6335da,
         type: 3}
       propertyPath: m_Offset.y

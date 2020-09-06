@@ -14,7 +14,7 @@ public class CraneController : MonoBehaviour, IControllable {
 
     public float absVelocity;
     public Vector2 currentVelocity;
-    public float approximateDistance = 0.05f;
+    public float approximateDistance = 0.5f;
     private RemoteController remote;
 
     [HideInInspector] public bool isRewinded { get; set; }
@@ -64,7 +64,7 @@ public class CraneController : MonoBehaviour, IControllable {
     		return;
     	}
         currentInstruction = instructions[currentInstructionId];
-        Actions.Execute(gameObject, currentInstruction.name, currentInstruction.position);
+        Actions.Execute(gameObject, currentInstruction);
     }
 
     void OnMouseOver() {

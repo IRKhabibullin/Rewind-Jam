@@ -12,8 +12,7 @@ public class RobotController : MonoBehaviour, IControllable {
     private Instruction currentInstruction;
     private Rigidbody2D body;
     private RemoteController remote;
-    private bool isWaiting;                                             // if robot is pending before executing another command
-    private bool endedCommand;                                          // if robot finished current command
+    private bool executingCommand;                                      // if robot executing command
     public Animator animator;
 
     [HideInInspector] public bool isRewinded { get; set; }
@@ -25,8 +24,8 @@ public class RobotController : MonoBehaviour, IControllable {
         currentInstructionId = -1;
         isRewinded = false;
         remote = GameObject.Find("Player").GetComponent<RemoteController>();
-        endedCommand = true;
-        isWaiting = false;
+        executingCommand = false;
+        NextInstruction();
     }
 
     void NextInstruction()
@@ -39,21 +38,22 @@ public class RobotController : MonoBehaviour, IControllable {
     	}
         currentInstruction = instructions[currentInstructionId];
         Actions.Execute(gameObject, currentInstruction);
-        endedCommand = false;
+        executingCommand = true;
         Debug.Log($"Executing command {currentInstruction.name} from position {transform.position.x}:{transform.position.y}");
     }
 
     
     void Update()
     {
-        if (endedCommand & !isWaiting) {
-        	NextInstruction();
-    	} else if (!endedCommand && Mathf.Abs(currentInstruction.position - transform.position.x) < approximateDistance) {
-            Debug.Log($"Ended command {currentInstruction.name} ({currentInstruction.position}) at {transform.position.x} ({transform.name})");
+        if (!executingCommand)
+        {
+            return;
+        }
+        if (Mathf.Abs(currentInstruction.position - transform.position.x) < approximateDistance) {
+            Debug.Log($"Robot: Ended command {currentInstruction.name} ({currentInstruction.position}) at {transform.position.x} ({transform.name})");
     		currentVelocity = new Vector2(0f, 0f);
     		animator.SetBool("Moving", false);
-			endedCommand = true;
-			StartCoroutine(WaitCommand(1f));
+            NextInstruction();
         }
     }
 
@@ -81,10 +81,4 @@ public class RobotController : MonoBehaviour, IControllable {
     		remote.Rewind(gameObject);
     	}
     }
-
-    IEnumerator WaitCommand(float time) {
-    	isWaiting = true;
-		yield return new WaitForSeconds(time);
-		isWaiting = false;
-	}
 }

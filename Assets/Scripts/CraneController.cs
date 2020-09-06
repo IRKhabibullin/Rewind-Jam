@@ -43,12 +43,17 @@ public class CraneController : MonoBehaviour, IControllable {
 			if (Mathf.Abs(currentInstruction.position - currentPosition) < approximateDistance) {
     			currentVelocity = new Vector2(0f, 0f);
         		NextInstruction();
-        	}
-    		head.GetComponent<Rigidbody2D>().velocity = currentVelocity;
-    		if (grabbedObject != null) {
-    			grabbedObject.position = head.transform.position + grabPosition;
+            }
+            if (grabbedObject != null)
+            {
+                grabbedObject.position = head.transform.position + grabPosition;
             }
         }
+    }
+
+    private void FixedUpdate()
+    {
+        head.GetComponent<Rigidbody2D>().velocity = currentVelocity;
     }
 
     public void Activate() {

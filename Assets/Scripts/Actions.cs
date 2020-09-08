@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum ActionName {
@@ -90,27 +89,22 @@ public class Actions {
 
 	private static void Grab(GameObject executor, float position) {
 		CraneController controller = executor.GetComponent<CraneController>();
-		GameObject[] grabbables = GameObject.FindGameObjectsWithTag("Grabbable");
 		bool foundButton = false;
-		foreach (GameObject grabbable in grabbables) {
-			if (Mathf.Abs(grabbable.transform.position.x - controller.head.transform.position.x) < controller.approximateDistance) {
-				controller.grabbedObject = grabbable.transform;
+		Collider2D[] colliders = Physics2D.OverlapCircleAll(controller.head.transform.position, controller.approximateDistance);
+		foreach (Collider2D grabbable in colliders) {
+			if (grabbable.tag == "Grabbable") {
+				controller.grabbedObject = grabbable.gameObject.transform;
 				foundButton = true;
 			}
 		}
 		if (!foundButton)
 		{
-			Debug.Log($"Any object from {grabbables.Length} grabbables not reachable. Crane is in {executor.transform.position.x} ({executor.name})");
+			Debug.Log($"Any object from {colliders.Length} grabbables not reachable. Crane is in {executor.transform.position.x} ({executor.name})");
 		}
 	}
 
 	private static void Release(GameObject executor) {
 		// release action position must be for <grabPosition> lower than previous action
         executor.GetComponent<CraneController>().grabbedObject = null;
-	}
-
-	static IEnumerator ProcessCommand(float time)
-	{
-		yield return new WaitForSeconds(time);
 	}
 }

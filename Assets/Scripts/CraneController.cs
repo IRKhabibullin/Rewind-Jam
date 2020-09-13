@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class CraneController : MonoBehaviour, IControllable {
 
-    [SerializeField] private Instruction[] instructions;
+    [SerializeField] private RInstruction[] instructions;
     public GameObject head;
     private bool activated;
     private int currentInstructionId;
-    private Instruction currentInstruction;
+    private RInstruction currentInstruction;
     public Transform grabbedObject;
     private Vector3 grabPosition;
 
@@ -69,7 +69,7 @@ public class CraneController : MonoBehaviour, IControllable {
     		return;
     	}
         currentInstruction = instructions[currentInstructionId];
-        Actions.Execute(gameObject, currentInstruction);
+        RActions.Execute(gameObject, currentInstruction);
     }
 
     void OnMouseOver() {

@@ -14,21 +14,23 @@ public enum ActionName {
 }
 
 [System.Serializable]
-public class Instruction {
+public class RInstruction {
 	public ActionName name;
 	public float position;
+	public GameObject target;
 }
 
-public class Actions {
+public class RActions {
 
-	public static void Execute(GameObject executor, Instruction instruction) {
+	public static void Execute(GameObject executor, RInstruction instruction) {
 		switch(instruction.name) {
 			case ActionName.Move:
-				executor.GetComponent<RobotController>().StartCoroutine(Move(executor, instruction.position));
+				//RobotController _rc = executor.GetComponent<RobotController>();
+				//_rc.StartCoroutine(Move(_rc, instruction));
 				break;
 			case ActionName.Activate:
-				executor.GetComponent<RobotController>().StartCoroutine(Activate(executor));
-				Activate(executor);
+				RobotController _rc = executor.GetComponent<RobotController>();
+				_rc.StartCoroutine(Activate(_rc, instruction));
 				break;
 			case ActionName.Lift:
 				Lift(executor, instruction.position);
@@ -45,32 +47,37 @@ public class Actions {
 		}
 	}
 
-	private static IEnumerator Move(GameObject executor, float position)
+	private static IEnumerator Move(RobotController _rc, RInstruction instruction)
 	{
-		float direction = Mathf.Sign(position - executor.transform.position.x);
-        executor.transform.rotation = Quaternion.LookRotation(new Vector3(0, 0, -direction));
-        RobotController controller = executor.GetComponent<RobotController>();
+		_rc.Move(instruction.target.transform.position);
+
+        yield return new WaitUntil(() => _rc.NearThePoint(instruction.target.transform.position));
+
 		yield return new WaitForSeconds(1f);
-		controller.currentVelocity = new Vector2(controller.absVelocity * direction, 0f);
-        executor.GetComponent<Rigidbody2D>().velocity = controller.currentVelocity;
-        controller.animator.SetBool("Moving", true);
+
+		instruction.target.GetComponent<ButtonController>().Activate();
+
+		//float direction = Mathf.Sign(position - executor.transform.position.x);
+		//executor.transform.rotation = Quaternion.LookRotation(new Vector3(0, 0, -direction));
+		//RobotController controller = executor.GetComponent<RobotController>();
+		//yield return new WaitForSeconds(1f);
+		//controller.currentVelocity = new Vector2(controller.absVelocity * direction, 0f);
+  //      executor.GetComponent<Rigidbody2D>().velocity = controller.currentVelocity;
+  //      controller.animator.SetBool("Moving", true);
 	}
 
-	private static IEnumerator Activate(GameObject executor) {
-		GameObject[] buttons = GameObject.FindGameObjectsWithTag("Button");
-        RobotController controller = executor.GetComponent<RobotController>();
-        bool foundButton = false;
-		foreach (GameObject button in buttons) {
-			if (Mathf.Abs(button.transform.position.x - executor.transform.position.x) < controller.approximateDistance)
-			{
-				yield return new WaitForSeconds(1f);
-				button.GetComponent<ButtonController>().Activate();
-				foundButton = true;
-			}
-		}
-		if (!foundButton) {
-			Debug.Log($"Any button from {buttons.Length} buttons not reachable. Robot is in {executor.transform.position.x} ({executor.name})");
-		}
+	private static IEnumerator Activate(RobotController _rc, RInstruction instruction)
+	{
+		_rc.Move(instruction.target.transform.position);
+
+		yield return new WaitUntil(() => _rc.NearThePoint(instruction.target.transform.position));
+
+		_rc.currentVelocity = new Vector2(0f, 0f);
+
+		yield return new WaitForSeconds(1f);
+
+		instruction.target.GetComponent<ButtonController>().Activate();
+		_rc.executingCommand = false;
 	}
 
 	private static void Lift(GameObject executor, float position) {

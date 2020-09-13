@@ -11,8 +11,9 @@ public class RobotController : MonoBehaviour, IControllable {
     private RInstruction currentInstruction;
     private Rigidbody2D body;
     private RemoteController remote;
-    public bool executingCommand;                                      // if robot executing command
+    public bool executingCommand;                                       // if robot executing command
     public Animator animator;
+    public Coroutine instructionCoroutine;
 
     [HideInInspector] public bool isRewinded { get; set; }
 
@@ -105,6 +106,12 @@ public class RobotController : MonoBehaviour, IControllable {
     IEnumerator ProcessNextCommand()
     {
         yield return new WaitForSeconds(1f);
+        NextInstruction();
+    }
+
+    public void Rewind()
+    {
+        StopCoroutine(instructionCoroutine);
         NextInstruction();
     }
 }

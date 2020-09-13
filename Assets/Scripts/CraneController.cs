@@ -87,4 +87,9 @@ public class CraneController : MonoBehaviour, IControllable {
             remote.Rewind(gameObject);
         }
     }
+
+    public void Rewind()
+    {
+
+    }
 }

@@ -14,4 +14,6 @@ public interface IControllable: IPressable {
 	// float absVelocity { get; set; }
 	// float approximateDistance { get; set; }
 	bool isRewinded {get; set; }
+
+	void Rewind();
 }

@@ -30,7 +30,7 @@ public class RActions {
 				break;
 			case ActionName.Activate:
 				RobotController _rc = executor.GetComponent<RobotController>();
-				_rc.StartCoroutine(Activate(_rc, instruction));
+				_rc.instructionCoroutine = _rc.StartCoroutine(Activate(_rc, instruction));
 				break;
 			case ActionName.Lift:
 				Lift(executor, instruction.position);

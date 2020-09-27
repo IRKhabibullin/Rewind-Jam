@@ -1,21 +1,27 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class RobotController : MonoBehaviour, IControllable {
+public class RobotController : MonoBehaviour, IOperator, IRewindable {
 
+    // TODO need to make rewindable objects vulnurable (written with bad practices) so remote can access them as it is indeed hacking tool
     [SerializeField] private RInstruction[] instructions;
-    public float absVelocity;
-    [HideInInspector] public Vector2 currentVelocity;
-    public float approximateDistance = 0.15f;                           // how far from command position robot can act (i.e. from what distance robot can press button)
-    private int currentInstructionId;
-    private RInstruction currentInstruction;
+    [SerializeField] private float absVelocity;
     private Rigidbody2D body;
+    private Animator animator;
+    private Transform grabPosition;
+    private RInstruction currentInstruction;
+    private int currentInstructionId;
+    private float faceDirection;
+    private Vector2 currentVelocity;
+
+    private Transform grabbedObject;
     private RemoteController remote;
-    public bool executingCommand;                                       // if robot executing command
-    public Animator animator;
+
+    public float approximationDistance = 0.15f;                // how far from command position robot can act (i.e. from what distance robot can press button)
+    public bool isExecutingCommand;                            // if robot executing command
     public Coroutine instructionCoroutine;
 
-    [HideInInspector] public bool isRewinded { get; set; }
+    public bool isRewinded { get; set; }
 
     
     void Start() {
@@ -24,7 +30,8 @@ public class RobotController : MonoBehaviour, IControllable {
         currentInstructionId = -1;
         isRewinded = false;
         remote = GameObject.Find("Player").GetComponent<RemoteController>();
-        executingCommand = false;
+        isExecutingCommand = false;
+        grabbedObject = null;
         NextInstruction();
     }
 
@@ -37,17 +44,16 @@ public class RobotController : MonoBehaviour, IControllable {
     		currentInstructionId = instructions.Length - 1;
     	}
         currentInstruction = instructions[currentInstructionId];
-        executingCommand = true;
+        isExecutingCommand = true;
         RActions.Execute(gameObject, currentInstruction);
-        Debug.Log($"Executing command {currentInstruction.name} from position {transform.position.x}:{transform.position.y}");
     }
 
     
     void Update()
     {
-        if (!executingCommand)
+        if (!isExecutingCommand)
         {
-            executingCommand = true;
+            isExecutingCommand = true;
             StartCoroutine(ProcessNextCommand());
         }
     }
@@ -62,10 +68,19 @@ public class RobotController : MonoBehaviour, IControllable {
             animator.SetBool("Moving", false);
         }
         body.velocity = currentVelocity;
+        if (grabbedObject != null)
+        {
+            grabbedObject.position = grabPosition.position;
+        }
     }
 
     public void Activate() {
     	// todo implement for further uses
+    }
+
+    public void LoadCargo(GameObject cargo)
+    {
+        grabbedObject = cargo.transform;
     }
 
     public void Move(Vector2 destination)
@@ -76,15 +91,20 @@ public class RobotController : MonoBehaviour, IControllable {
             return;
         }
 
-        float direction = Mathf.Sign(destination.x - transform.position.x);
-        transform.rotation = Quaternion.LookRotation(new Vector3(0, 0, -direction));
-        currentVelocity = new Vector2(absVelocity * direction, 0f);
+        faceDirection = Mathf.Sign(destination.x - transform.position.x);
+        transform.rotation = Quaternion.LookRotation(new Vector3(0, 0, -faceDirection));
+        currentVelocity = new Vector2(absVelocity * faceDirection, 0f);
+    }
+
+    public void Stop()
+    {
+        currentVelocity = Vector2.zero;
     }
 
     /// <summary> Checks if object is standing near the passed point </summary>
     public bool NearThePoint(Vector2 point)
     {
-        return Mathf.Abs(point.x - transform.position.x) <= approximateDistance;
+        return Mathf.Abs(point.x - transform.position.x) <= approximationDistance;
     }
 
     void OnMouseOver() {

@@ -55,7 +55,7 @@ public class RemoteController : MonoBehaviour {
 		// }
   //   }
     public void Rewind(GameObject rewindTarget) {
-        rewindTarget.GetComponent<IControllable>().Rewind();
+        rewindTarget.GetComponent<IRewindable>().Rewind();
         RemoveAim();
     }
 }

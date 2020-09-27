@@ -1,16 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ButtonController : MonoBehaviour, IPressable {
-
-	private IPressable mechanism;
+    public IControllable mechanism { get; private set; }
 
     void Start() {
-        mechanism = transform.parent.gameObject.GetComponent<IPressable>();
+        mechanism = transform.parent.gameObject.GetComponent<IControllable>();
     }
 
-    public void Activate() {
-    	mechanism.Activate();
+    public void Activate(IOperator r_operator) {
+    	mechanism.Activate(r_operator);
     }
 }

@@ -3,7 +3,6 @@ using UnityEngine;
 
 public enum ActionName {
 	// Robot actions
-	Move,
 	Activate,
 
 	// Crane actions
@@ -24,10 +23,6 @@ public class RActions {
 
 	public static void Execute(GameObject executor, RInstruction instruction) {
 		switch(instruction.name) {
-			case ActionName.Move:
-				//RobotController _rc = executor.GetComponent<RobotController>();
-				//_rc.StartCoroutine(Move(_rc, instruction));
-				break;
 			case ActionName.Activate:
 				RobotController _rc = executor.GetComponent<RobotController>();
 				_rc.instructionCoroutine = _rc.StartCoroutine(Activate(_rc, instruction));
@@ -47,37 +42,18 @@ public class RActions {
 		}
 	}
 
-	private static IEnumerator Move(RobotController _rc, RInstruction instruction)
-	{
-		_rc.Move(instruction.target.transform.position);
-
-        yield return new WaitUntil(() => _rc.NearThePoint(instruction.target.transform.position));
-
-		yield return new WaitForSeconds(1f);
-
-		instruction.target.GetComponent<ButtonController>().Activate();
-
-		//float direction = Mathf.Sign(position - executor.transform.position.x);
-		//executor.transform.rotation = Quaternion.LookRotation(new Vector3(0, 0, -direction));
-		//RobotController controller = executor.GetComponent<RobotController>();
-		//yield return new WaitForSeconds(1f);
-		//controller.currentVelocity = new Vector2(controller.absVelocity * direction, 0f);
-  //      executor.GetComponent<Rigidbody2D>().velocity = controller.currentVelocity;
-  //      controller.animator.SetBool("Moving", true);
-	}
-
 	private static IEnumerator Activate(RobotController _rc, RInstruction instruction)
 	{
 		_rc.Move(instruction.target.transform.position);
 
 		yield return new WaitUntil(() => _rc.NearThePoint(instruction.target.transform.position));
 
-		_rc.currentVelocity = new Vector2(0f, 0f);
+		_rc.Stop();
 
 		yield return new WaitForSeconds(1f);
 
-		instruction.target.GetComponent<ButtonController>().Activate();
-		_rc.executingCommand = false;
+		instruction.target.GetComponent<ButtonController>().Activate(_rc);
+		_rc.isExecutingCommand = false;
 	}
 
 	private static void Lift(GameObject executor, float position) {

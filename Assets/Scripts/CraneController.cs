@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CraneController : MonoBehaviour, IControllable {
+public class CraneController : MonoBehaviour, IControllable, IRewindable {
 
     [SerializeField] private RInstruction[] instructions;
     public GameObject head;
@@ -56,7 +56,7 @@ public class CraneController : MonoBehaviour, IControllable {
         head.GetComponent<Rigidbody2D>().velocity = currentVelocity;
     }
 
-    public void Activate() {
+    public void Activate(IOperator r_operator) {
     	activated = true;
     	NextInstruction();
     }

@@ -1,19 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿public interface IPressable {
+	// Can be activated only by IOperator implemented objects
+	IControllable mechanism { get; }
 
-public interface IPressable {
-	// Robots can activate, player/remote can't
-	void Activate();
+	void Activate(IOperator r_operator);
 }
 
-public interface IControllable: IPressable {
-	// player/remote/buttons can activate, robots can't
+public interface IControllable {
+	// Can be activated only by IPressable implemented objects
+	void Activate(IOperator r_operator);
+}
 
-	// float currentVelocity { get; set; }
-	// float absVelocity { get; set; }
-	// float approximateDistance { get; set; }
-	bool isRewinded {get; set; }
+public interface IRewindable
+{
+	// Can be activate only by IRewind implemented objects
+	bool isRewinded { get; set; }
 
 	void Rewind();
+}
+
+public interface IOperator
+{
+
+}
+
+public interface IRewind
+{
+
 }

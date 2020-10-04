@@ -1,4 +1,9 @@
-﻿public interface IPressable {
+﻿using System;
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
+
+public interface IPressable {
 	// Can be activated only by IOperator implemented objects
 	IControllable mechanism { get; }
 
@@ -10,20 +15,49 @@ public interface IControllable {
 	void Activate(IOperator r_operator);
 }
 
-public interface IRewindable
-{
-	// Can be activate only by IRewind implemented objects
-	bool isRewinded { get; set; }
-
-	void Rewind();
-}
-
-public interface IOperator
-{
+public interface IOperator {
 
 }
 
-public interface IRewind
+public class CyclicLinkedList<T> : List<T>
+{
+	public T[] data;
+	private int currentItem;
+
+	public CyclicLinkedList() {
+		currentItem = 0;
+	}
+
+	public int Count { get; }
+
+	public T GetCurrent()
+    {
+		return data[currentItem];
+    }
+
+	public T Next()
+    {
+		currentItem += 1;
+		if (currentItem == data.Length)
+        {
+			currentItem = 0;
+        }
+		return data[currentItem];
+    }
+
+	public T Prev()
+    {
+		currentItem -= 1;
+		if (currentItem < 0)
+        {
+			currentItem = data.Length - 1;
+        }
+		return data[currentItem];
+    }
+}
+
+[Serializable]
+public class InstructionsCycle: CyclicLinkedList<RInstruction>
 {
 
 }

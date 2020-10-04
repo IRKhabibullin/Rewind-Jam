@@ -2336,30 +2336,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 772fde8ef09623646bf87ffe3c5552ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  head: {fileID: 0}
   instructions:
-  - name: 2
-    position: -2.25
-    target: {fileID: 0}
-  - name: 4
-    position: -3
-    target: {fileID: 0}
-  - name: 2
-    position: 3.75
-    target: {fileID: 0}
-  - name: 3
-    position: 3.5
-    target: {fileID: 0}
-  - name: 5
-    position: 3
-    target: {fileID: 0}
-  - name: 3
-    position: -1.5
-    target: {fileID: 0}
-  head: {fileID: 2035368080}
-  grabbedObject: {fileID: 0}
-  absVelocity: 5
-  currentVelocity: {x: 0, y: 0}
-  approximateDistance: 0.1
+    data:
+    - name: 1
+      position: {x: 0, y: 0}
+      target: {fileID: 0}
+    - name: 0
+      position: {x: 0, y: 0}
+      target: {fileID: 0}
+    - name: 0
+      position: {x: 0, y: 0}
+      target: {fileID: 0}
+    - name: 0
+      position: {x: 0, y: 0}
+      target: {fileID: 0}
 --- !u!212 &1570253101
 SpriteRenderer:
   m_ObjectHideFlags: 0

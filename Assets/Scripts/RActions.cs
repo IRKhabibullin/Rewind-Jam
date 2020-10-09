@@ -3,13 +3,7 @@ using UnityEngine;
 
 public enum ActionName {
 	// Robot actions
-	Activate,
-
-	// Crane actions
-	Lift,
-	MoveSide,
-	Grab,
-	Deliver
+	Activate
 }
 
 [System.Serializable]
@@ -27,20 +21,6 @@ public class RActions {
 				RobotController _rc = executor.GetComponent<RobotController>();
 				_rc.instructionCoroutine = _rc.StartCoroutine(Activate(_rc, instruction));
 				break;
-			//case ActionName.Lift:
-			//	Lift(executor, instruction.position);
-			//	break;
-			//case ActionName.MoveSide:
-			//	MoveSide(executor, instruction.position);
-			//	break;
-			case ActionName.Grab:
-				CraneController _cc = executor.GetComponent<CraneController>();
-				_cc.instructionCoroutine = _cc.StartCoroutine(Grab(executor, instruction.position));
-				break;
-			case ActionName.Deliver:
-				//CraneController _cc = executor.GetComponent<CraneController>();
-				//_cc.instructionCoroutine = _cc.StartCoroutine(Deliver(executor, instruction.position));
-				break;
 		}
 	}
 
@@ -56,49 +36,5 @@ public class RActions {
 
 		instruction.target.GetComponent<ButtonController>().Activate(_rc);
 		_rc.EndInstruction();
-	}
-
-	private static void Lift(GameObject executor, float position) {
-		CraneController controller = executor.GetComponent<CraneController>();
-		//float direction = Mathf.Sign(position - controller.head.transform.position.y);
-		//controller.currentVelocity = new Vector2(0f, controller.absVelocity * direction);
-		//controller.head.GetComponent<Rigidbody2D>().velocity = controller.currentVelocity;
-	}
-
-	private static void MoveSide(GameObject executor, float position) {
-		CraneController controller = executor.GetComponent<CraneController>();
-		//float direction = Mathf.Sign(position - controller.head.transform.position.x);
-		//controller.currentVelocity = new Vector2(controller.absVelocity * direction, 0f);
-		//controller.head.GetComponent<Rigidbody2D>().velocity = controller.currentVelocity;
-	}
-
-	private static IEnumerator MoveHeadToPosition(CraneController controller, Vector2 position)
-    {
-		Vector2 next_position = new Vector2(controller.head.transform.position.x, controller.transform.position.y);
-		controller.MoveHead(next_position);
-
-		yield return new WaitUntil(() => controller.NearThePoint(next_position));
-
-		next_position = new Vector2(position.x, controller.head.transform.position.y);
-		controller.MoveHead(next_position);
-
-		yield return new WaitUntil(() => controller.NearThePoint(next_position));
-
-		next_position = new Vector2(controller.head.transform.position.x, position.y);
-		controller.MoveHead(next_position);
-
-		yield return new WaitUntil(() => controller.NearThePoint(next_position));
-	}
-
-	private static IEnumerator Grab(GameObject executor, Vector2 position) {
-		CraneController controller = executor.GetComponent<CraneController>();
-		yield return controller.StartCoroutine(MoveHeadToPosition(controller, position));
-		controller.Grab();
-    }
-
-	private static IEnumerator Deliver(GameObject executor, Vector2 position) {
-		CraneController controller = executor.GetComponent<CraneController>();
-		yield return controller.StartCoroutine(MoveHeadToPosition(controller, position));
-		controller.Release();
 	}
 }

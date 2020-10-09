@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ExitScript : MonoBehaviour {
-    private BoxCollider2D collider;
+    private BoxCollider2D mCollider;
 
     void Start() {
-        collider = GetComponent<BoxCollider2D>();
+        mCollider = GetComponent<BoxCollider2D>();
     }
 
     void Update() {

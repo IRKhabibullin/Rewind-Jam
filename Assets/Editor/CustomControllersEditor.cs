@@ -22,7 +22,7 @@ public class CraneInstructionDrawer : PropertyDrawer
 
         // Draw fields - passs GUIContent.none to each so they are drawn without labels
         EditorGUI.PropertyField(nameRect, property.FindPropertyRelative("name"), GUIContent.none);
-        if ((CraneAction)actionName.intValue == CraneAction.Grab)
+        if ((CraneAction)actionName.intValue == CraneAction.PickUp || (CraneAction)actionName.intValue == CraneAction.Deliver)
         {
             EditorGUI.PropertyField(targetRect, property.FindPropertyRelative("position"), GUIContent.none);
         } else

@@ -22,13 +22,14 @@ public class CyclicLinkedList<T> : List<T>
 	private int currentItem;
 
 	public CyclicLinkedList() {
-		currentItem = 0;
+		currentItem = -1;
 	}
-
-	public int Count { get; }
 
 	public T GetCurrent()
     {
+		if (currentItem < 0) {
+			return Next();
+        }
 		return data[currentItem];
     }
 
@@ -42,7 +43,7 @@ public class CyclicLinkedList<T> : List<T>
 		return data[currentItem];
     }
 
-	public T Prev()
+	public T Previous()
     {
 		currentItem -= 1;
 		if (currentItem < 0)

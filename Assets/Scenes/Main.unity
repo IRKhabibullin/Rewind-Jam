@@ -2336,20 +2336,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 772fde8ef09623646bf87ffe3c5552ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  head: {fileID: 0}
+  head: {fileID: 2035368080}
+  absVelocity: 5
+  approximationDistance: 0.5
   instructions:
     data:
+    - name: 0
+      position: {x: -1.5, y: -2.5}
+      target: {fileID: 0}
     - name: 1
-      position: {x: 0, y: 0}
-      target: {fileID: 0}
-    - name: 0
-      position: {x: 0, y: 0}
-      target: {fileID: 0}
-    - name: 0
-      position: {x: 0, y: 0}
-      target: {fileID: 0}
-    - name: 0
-      position: {x: 0, y: 0}
+      position: {x: 3.5, y: 1.5}
       target: {fileID: 0}
 --- !u!212 &1570253101
 SpriteRenderer:

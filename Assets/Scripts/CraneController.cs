@@ -2,24 +2,21 @@
 using System.Collections;
 using UnityEngine;
 
-public enum CraneAction { Grab, Deliver }
-
-[System.Serializable]
-public class CraneInstruction
-{
-    public CraneAction name;
-    public Vector2 position;
-    public GameObject target;
-}
-
-[Serializable]
-public class CraneInstructions : CyclicLinkedList<CraneInstruction>
-{
-
-}
 
 public class CraneController : MonoBehaviour, IControllable
 {
+    public enum CraneAction { Grab, Deliver }
+
+    [Serializable]
+    public class CraneInstruction
+    {
+        public CraneAction name;
+        public Vector2 position;
+        public GameObject target;
+    }
+
+    [Serializable]
+    public class CraneInstructions : CyclicLinkedList<CraneInstruction> { }
 
     public GameObject head;
     private Transform grabbedObject;

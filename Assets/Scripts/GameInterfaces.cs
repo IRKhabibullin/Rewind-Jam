@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
 public interface IPressable {
 	// Can be activated only by IOperator implemented objects
@@ -54,10 +51,4 @@ public class CyclicLinkedList<T> : List<T>
         }
 		return data[currentItem];
     }
-}
-
-[Serializable]
-public class InstructionsCycle: CyclicLinkedList<RInstruction>
-{
-
 }

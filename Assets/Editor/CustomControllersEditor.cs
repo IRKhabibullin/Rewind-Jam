@@ -1,6 +1,6 @@
-﻿using Boo.Lang;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
+using static CraneController;
 
 [CustomPropertyDrawer(typeof(CraneInstruction))]
 public class CraneInstructionDrawer : PropertyDrawer

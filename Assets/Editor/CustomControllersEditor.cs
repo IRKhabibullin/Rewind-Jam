@@ -14,7 +14,7 @@ public class CraneInstructionDrawer : PropertyDrawer
 
         // Calculate rects
         var nameRect = new Rect(position.x, position.y, 100, position.height);
-        var targetRect = new Rect(position.x + 104, position.y, position.width - 104, position.height);
+        var targetRect = new Rect(position.x + 110, position.y, position.width - 110, position.height);
 
         var actionName = property.FindPropertyRelative("name");
 
@@ -38,8 +38,12 @@ public class CraneInstructionsDrawer : PropertyDrawer
     int elementHeight = 21;
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        //return (property.FindPropertyRelative("data").arraySize + 1) * 20;
-        return 200;
+        SerializedProperty arrayProp = property.FindPropertyRelative("data");
+        if (arrayProp.isExpanded)
+        {
+            return (arrayProp.arraySize + 1) * elementHeight;
+        }
+        return elementHeight;
     }
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {

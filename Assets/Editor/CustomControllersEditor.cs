@@ -5,6 +5,8 @@ using static CraneController;
 [CustomPropertyDrawer(typeof(CraneInstruction))]
 public class CraneInstructionDrawer : PropertyDrawer
 {
+    int propertyRect = 112;
+    int propertyOffset = 10;
     // Draw the property inside the given rect
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
@@ -13,8 +15,8 @@ public class CraneInstructionDrawer : PropertyDrawer
         EditorGUI.BeginProperty(position, label, property);
 
         // Calculate rects
-        var nameRect = new Rect(position.x, position.y, 100, position.height);
-        var targetRect = new Rect(position.x + 110, position.y, position.width - 110, position.height);
+        var nameRect = new Rect(position.x, position.y, propertyRect, position.height);
+        var targetRect = new Rect(position.x + propertyRect + propertyOffset, position.y, position.width - propertyRect - propertyOffset, position.height);
 
         var actionName = property.FindPropertyRelative("name");
 
@@ -41,25 +43,25 @@ public class CraneInstructionsDrawer : PropertyDrawer
         SerializedProperty arrayProp = property.FindPropertyRelative("data");
         if (arrayProp.isExpanded)
         {
-            return (arrayProp.arraySize + 1) * elementHeight;
+            return (arrayProp.arraySize + 2.5f) * elementHeight;
         }
         return elementHeight;
     }
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         SerializedProperty arrayProp = property.FindPropertyRelative("data");
-        arrayProp.isExpanded = EditorGUI.Foldout(new Rect(position.x, position.y, position.width, elementHeight), arrayProp.isExpanded, GUIContent.none);
+        arrayProp.isExpanded = EditorGUI.Foldout(new Rect(position.x, position.y, position.width, elementHeight), arrayProp.isExpanded, label, true);
         EditorGUI.BeginProperty(position, label, property);
-
-        position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
 
         if (arrayProp.isExpanded)
         {
             // Instructions size
-            EditorGUI.PropertyField(new Rect(position.x, position.y, position.width, elementHeight), arrayProp.FindPropertyRelative("Array.size"));
+            EditorGUI.PropertyField(new Rect(position.x, position.y + elementHeight, position.width, elementHeight), arrayProp.FindPropertyRelative("Array.size"));
 
+            Handles.color = Color.black;
+            Handles.DrawLine(new Vector2(position.x, position.y + elementHeight * 2.25f), new Vector2(position.width + 15, position.y + elementHeight * 2.25f));
             // List of instructions
-            Rect nextItemPosition = new Rect(position.x, position.y + elementHeight, position.width, elementHeight);
+            Rect nextItemPosition = new Rect(position.x, position.y + elementHeight * 2.5f, position.width, elementHeight);
             for (int i = 0; i < arrayProp.arraySize; i++)
             {
                 SerializedProperty value = arrayProp.GetArrayElementAtIndex(i);
